@@ -1,0 +1,4 @@
+search 2 failed with error code 2
+search 4 failed with error code 2
+search 2 failed with error code 2
+search 4 failed with error code 2

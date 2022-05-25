@@ -1,0 +1,5 @@
+search 1 failed with error code 2
+search 2 failed with error code 2
+search 3 failed with error code 2
+search 4 failed with error code 2
+search 5 failed with error code 2

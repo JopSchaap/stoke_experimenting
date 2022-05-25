@@ -1,0 +1,2 @@
+STOKE search fails to find truly correct optimization 
+I believe this is because the test cases during synthesis show correctness but during validation do not.
