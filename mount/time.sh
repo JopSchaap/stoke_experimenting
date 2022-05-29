@@ -3,6 +3,8 @@
 # Change to directory to time
 cd $1 || exit $?
 
+make clean
+
 # Peform the search for $2 times.
 for (( i = 1; i <= $2; i++ )) do
     # Generate new tests and synthesize the program
@@ -16,5 +18,6 @@ for (( i = 1; i <= $2; i++ )) do
         # Time the program and exit if fail
         make time || exit $?
     done;
-    cp -r work work_$i || exit
+    make clean_tests || exit $?
+    cp -r work work_$i || exit $?
 done

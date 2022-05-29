@@ -4,7 +4,7 @@ port := $(file < $(port_file))
 
 current_dir := $(shell basename "$(CURDIR)")/
 
-src_files := $(strip $(wildcard $(src_dir)*.c) $(wildcard $(main_file)))
+src_files := $(wildcard $(main_file))
 
 fake_main_file := $(patsubst %.cpp,%.c,$(main_file))
 out_file := $(addprefix $(work_dir),$(patsubst %.c,%_v12.o, $(fake_main_file)))
@@ -114,6 +114,8 @@ clean_time:
 clean:
 	rm -r $(work_dir)
 
-
+.PHONY: clean_tests
+clean_tests:
+	rm $(test_cases)
 
 	
