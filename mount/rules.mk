@@ -20,20 +20,25 @@ optimized_time_file := $(work_dir)$(patsubst %.c,%_stoke_time.csv,$(fake_main_fi
 output_dir := $(work_dir)
 bins_dir := $(addsuffix bins/, $(output_dir))
 
-test_cases := $(work_dir)test_cases.tc
-
 ssh := ssh "-p$(port)" -o StrictHostKeyChecking=no "stoke@$(ip_address)" cd mount/$(current_dir) \;
 
 stoke := $(ssh) $(stoke_binary)
 gcc_v4 := $(ssh) gcc
 
-function_s_file := $(bins_dir)$(function).s
-function_result_file := $(work_dir)result.s
+function_s_file := $(addprefix $(bins_dir), $(addsuffix .s,$(function)))
+function_result_file := $(patsubst %.s,%_result.s,$(function_s_file))
+test_cases := $(addprefix $(work_dir), $(addsuffix _test_cases.tc ,$(function)))
+
+
 ################################################################################
 
 .PHONY: test
-test:
-	#$(gcc_v4)
+test: $(function)
+	# $(function)
+
+$(function): 
+	override TEMP := $@help
+	#$(TEMP)
 
 
 .PHONY: time
@@ -49,7 +54,8 @@ $(gcc_v12_no_fast_time_file) $(gcc_v12_fast_time_file) $(gcc_v4_time_file) $(opt
 
 
 .PHONY: synthesize
-synthesize $(stoke_out_file): $(out_file_v4) $(test_cases) $(src_dir)synthesize.conf
+synthesize: $(stoke_out_file) 
+$(stoke_out_file): $(function_result_file) $(out_file_v4)
 	$(stoke) search \
 		--config $(src_dir)synthesize.conf \
 		--out $(function_result_file)\
@@ -60,12 +66,19 @@ synthesize $(stoke_out_file): $(out_file_v4) $(test_cases) $(src_dir)synthesize.
 		--rewrite $(function_result_file) \
 		-o $(stoke_out_file)
 
+$(function_result_file): $(test_cases) $(src_dir)synthesize.conf
+	$(stoke) search \
+		--config $(src_dir)synthesize.conf \
+		--out $@\
+		--testcases $(test_cases) \
+		--target $(function_s_file)
+
 .PHONY: generate_tests 
 generate_tests: $(test_cases)
 $(test_cases): $(out_file_v4) $(bins_dir) $(src_dir)testcase.conf
 	$(stoke) testcase \
-		--target $(function_s_file) \
-		-o $(test_cases)\
+		--target $(patsubst %_test_cases.tc,%.s,$(patsubst $(work_dir)%,$(bins_dir)%,$@)) \
+		-o $@\
 		--config $(src_dir)testcase.conf
 
 
