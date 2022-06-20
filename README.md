@@ -1,8 +1,17 @@
-# Experimental setup for Evaluating Stochastic Floating-Point Superoptimization with
-STOKE
+# Experimental setup for Evaluating Stochastic Floating-Point Superoptimization with STOKE
+
 ## Table of Contents
 
-[TOC]
+
+* [Table of Contents](#table-of-contents)
+* [Overview](#overview)
+* [Running the Experiments](#running-the-experiments)
+  + [Prerequisites](#prerequisites)
+  + [Steps to run the experiments](#steps-to-run-the-experiments)
+* [Adding additional experiments](#adding-additional-experiments)
+* [Project Structure](#project-structure)
+* [Useful links](#useful-links)
+
 
 ## Overview
 
